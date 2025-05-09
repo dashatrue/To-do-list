@@ -18,10 +18,10 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')
+            return redirect('category_list')
     else:
         form = SignUpForm()
-    return render(request, 'signup.html', {'form':form})
+    return render(request, 'todolist/signup.html', {'form':form})
 
 def login_view(request):
     form = LoginForm(data=request.POST or None)
@@ -32,9 +32,9 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('category_list')
             
-    return render(request, 'login.html', {'form':form})
+    return render(request, 'todolist/login.html', {'form':form})
 
 @login_required
 def user_tasks_list(request):
@@ -100,6 +100,12 @@ def update_task(request, task_id):
         else:
             return render(request, 'todolist/update_task.html', {'task':task})
         
+@login_required
+@admin_required
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'todolist/category_list.html', {'categories': categories})
+
 @login_required
 @admin_required
 def create_category(request):
