@@ -27,9 +27,9 @@ def login_view(request):
     form = LoginForm(data=request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            username = form.cleaned_data['username']
+            email = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password)
+            user = authenticate(request, username=email, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('category_list')
