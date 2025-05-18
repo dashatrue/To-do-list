@@ -27,9 +27,9 @@ def login_view(request):
     form = LoginForm(data=request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            email = form.cleaned_data['username']
+            username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(request, username=email, password=password)
+            user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('category_list')
@@ -42,7 +42,7 @@ def user_tasks_list(request):
     return render(request, 'todolist/user_tasks_list.html', {'tasks': tasks})
 
 @login_required
-@admin_required
+#@admin_required
 def delete_task(request, task_id):
     if request.method == 'POST':
         task = Task.objects.get(id=task_id)
@@ -50,7 +50,7 @@ def delete_task(request, task_id):
     return redirect(reverse('category_list'))
 
 @login_required
-@admin_required
+#@admin_required
 def create_task(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -82,7 +82,7 @@ def create_task(request):
         return  render(request, 'todolist/create_task.html', {'categories': categories, 'users': users})
     
 @login_required
-@admin_required
+#@admin_required
 def update_task(request, task_id):
     task = Task.objects.get(pk=task_id)
     if request.method == 'POST':
@@ -101,13 +101,13 @@ def update_task(request, task_id):
             return render(request, 'todolist/update_task.html', {'task':task})
         
 @login_required
-@admin_required
+#@admin_required
 def category_list(request):
     categories = Category.objects.all()
     return render(request, 'todolist/category_list.html', {'categories': categories})
 
 @login_required
-@admin_required
+#@admin_required
 def create_category(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -116,7 +116,7 @@ def create_category(request):
     return render(request, 'todolist/create_category.html')
 
 @login_required
-@admin_required
+#@admin_required
 def delete_category(request, category_id):
     category = Category.objects.get(pk=category_id)
     if category.task_set.exists():
@@ -128,14 +128,14 @@ def delete_category(request, category_id):
     return redirect('category_list')
 
 @login_required
-@admin_required
+#@admin_required
 def category_tasks(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
     tasks = category.task_set.all()
     return render(request, 'todolist/category_tasks.html', {'category': category, 'tasks': tasks})
 
 @login_required
-@admin_required
+#@admin_required
 def task_chart(request):
     categories = Category.objects.all()
     pending_counts = {}
